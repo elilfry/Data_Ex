@@ -7,7 +7,7 @@ import string
 db = mysql.connector.connect(
     host="localhost",
     user="root",  
-    password="enter-your-password",  # important - enter your password
+    password="enter-your-password",  # important - enter your password 
     database="ecommerce"
 )
 cursor = db.cursor()
@@ -41,10 +41,12 @@ for i in range(1, 6):  # 5 products
 
 # Generate 10,000 orders per month for 3 months
 for month in range(3):
-    month_start = datetime(2025, 4 + month, 1)
+    # Start from current month (end_date), and go backwards
+    current_month_date = end_date.replace(day=1) - timedelta(days=month * 30)
+    month_start = current_month_date.replace(day=1)
     for _ in range(10000):
         customer_id = random.choice(customer_ids)
-        order_date = month_start + timedelta(days=random.randint(0, 30))
+        order_date = month_start + timedelta(days=random.randint(0, 27))
         total_amount = round(random.uniform(10, 500), 2)
         sql = "INSERT INTO orders (customer_id, order_date, total_amount) VALUES (%s, %s, %s)"
         cursor.execute(sql, (customer_id, order_date, total_amount))
